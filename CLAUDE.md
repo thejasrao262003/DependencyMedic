@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Status
 
-This repository is currently **specification-only**. No backend, frontend, or infrastructure code has been written yet — only design documents under `docs/` and a `README.md`. The next implementation step is Phase 1 (Foundation Setup) from [docs/implementation_plan.md](docs/implementation_plan.md): scaffolding Docker Compose, MongoDB, Redis, FastAPI backend, and React frontend skeletons.
+**Read [PROGRESS.md](PROGRESS.md) first.** It is the living status document maintained by both developers. It records which phases are complete, what is stubbed, what is in-progress, and what is next. Always check it before implementing anything so you don't duplicate or conflict with the other developer's work.
 
 When asked to implement anything, treat the docs in `/docs` as the source of truth — do not invent architecture, event names, schema fields, or API shapes. If a detail is missing, check the relevant spec doc before guessing.
 
