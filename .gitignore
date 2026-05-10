@@ -1,0 +1,96 @@
+# ---------- Secrets / env ----------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials.json
+
+# ---------- Python (backend) ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# Virtual envs
+.venv/
+venv/
+env/
+ENV/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# ---------- Node / frontend ----------
+node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+.eslintcache
+.parcel-cache/
+.next/
+.nuxt/
+.svelte-kit/
+.turbo/
+*.tsbuildinfo
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# ---------- Docker / infra ----------
+docker-compose.override.yml
+.docker/
+*.pid
+
+# ---------- Local data / runtime ----------
+data/
+mongo-data/
+redis-data/
+*.sqlite
+*.sqlite3
+*.db
+logs/
+*.log
+
+# ---------- graphify ----------
+graphify-out/
+
+# ---------- Editors / OS ----------
+.vscode/
+!.vscode/settings.json.example
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ---------- Misc ----------
+*.bak
+*.tmp
+.cache/
