@@ -4,7 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Status
 
-**Read [PROGRESS.md](PROGRESS.md) first.** It is the living status document maintained by both developers. It records which phases are complete, what is stubbed, what is in-progress, and what is next. Always check it before implementing anything so you don't duplicate or conflict with the other developer's work.
+**Read [`progress/`](progress/) first.** Session logs are stored per developer:
+- `progress/varun/` — Dev A (vuln_intelligence, reachability_analysis)
+- `progress/devb/` — Dev B (remediation_engine, gitlab_integration)
+
+Read the newest file in the relevant folder (sort by date in filename) to get current status. This tells you what is implemented vs stubbed, what was just completed, and what is planned next — without re-exploring the full codebase.
 
 When asked to implement anything, treat the docs in `/docs` as the source of truth — do not invent architecture, event names, schema fields, or API shapes. If a detail is missing, check the relevant spec doc before guessing.
 
