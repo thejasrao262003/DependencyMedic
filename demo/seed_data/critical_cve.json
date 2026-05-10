@@ -1,0 +1,14 @@
+{
+  "cve_id": "CVE-2021-44228",
+  "description": "Log4Shell - Apache Log4j2 Remote Code Execution",
+  "severity": "critical",
+  "cvss_score": 10.0,
+  "affected_packages": [
+    {
+      "name": "log4j-core",
+      "ecosystem": "maven",
+      "affected_versions": "<2.15.0",
+      "fixed_versions": ["2.15.0", "2.17.1"]
+    }
+  ]
+}

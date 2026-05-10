@@ -1,0 +1,26 @@
+MAX_RETRY_ATTEMPTS = 2
+
+STREAM_VULN_DISCOVERED = "vuln.discovered"
+STREAM_VULN_MATCHED = "vuln.matched"
+STREAM_VULN_ASSESSED = "vuln.assessed"
+STREAM_VULN_SCORED = "vuln.scored"
+STREAM_PATCH_GENERATED = "patch.generated"
+STREAM_PATCH_RETRY_REQUESTED = "patch.retry_requested"
+STREAM_PATCH_VALIDATED = "patch.validated"
+STREAM_CI_STARTED = "ci.started"
+STREAM_CI_FAILED = "ci.failed"
+STREAM_MR_CREATED = "mr.created"
+STREAM_MR_UPDATED = "mr.updated"
+STREAM_PIPELINE_COMPLETED = "pipeline.completed"
+
+DB_NAME = "dependencymedic"
+
+COLLECTION_VULNERABILITIES = "vulnerabilities"
+COLLECTION_REPOSITORIES = "repositories"
+COLLECTION_DEPENDENCY_SNAPSHOTS = "dependency_snapshots"
+COLLECTION_RISK_ASSESSMENTS = "risk_assessments"
+COLLECTION_PATCH_ATTEMPTS = "patch_attempts"
+COLLECTION_PIPELINE_RUNS = "pipeline_runs"
+COLLECTION_MERGE_REQUESTS = "merge_requests"
+COLLECTION_EVENTS = "events"
+COLLECTION_AGENT_RUNS = "agent_runs"
