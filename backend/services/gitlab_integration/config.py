@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     redis_url: str = "redis://redis:6379"
     gitlab_url: str = "https://gitlab.com"
     gitlab_token: str = ""
+    pipeline_poll_interval_seconds: float = 2.0
+    pipeline_poll_max_seconds: float = 120.0
     log_level: str = "INFO"
     environment: str = "development"
 
