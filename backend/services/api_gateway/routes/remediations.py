@@ -1,8 +1,12 @@
+import httpx
 from fastapi import APIRouter, Query
 from pydantic import BaseModel
+
+from shared.constants import COLLECTION_PATCH_ATTEMPTS
 from shared.schemas.response import APIResponse
 from shared.utils.mongo import get_database
-from shared.constants import COLLECTION_PATCH_ATTEMPTS
+
+from ..config import settings
 
 router = APIRouter(prefix="/remediations", tags=["remediations"])
 
@@ -14,9 +18,15 @@ class GenerateRemediationRequest(BaseModel):
 
 @router.post("/generate", response_model=APIResponse, status_code=202)
 async def generate_remediation(body: GenerateRemediationRequest):
-    return APIResponse.ok(
-        {"patch_attempt_id": None, "status": "started", "message": "Remediation not yet implemented"}
-    )
+    url = f"{settings.remediation_engine_url.rstrip('/')}/api/v1/remediate"
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        try:
+            resp = await client.post(url, json=body.model_dump())
+        except httpx.RequestError as err:
+            return APIResponse.fail("REMEDIATION_UNREACHABLE", str(err))
+    if resp.status_code >= 500:
+        return APIResponse.fail("REMEDIATION_FAILED", resp.text)
+    return resp.json()
 
 
 @router.get("", response_model=APIResponse)

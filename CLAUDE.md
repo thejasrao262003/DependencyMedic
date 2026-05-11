@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Read [`progress/`](progress/) first.** Session logs are stored per developer:
 - `progress/varun/` — Dev A (vuln_intelligence, reachability_analysis)
-- `progress/devb/` — Dev B (remediation_engine, gitlab_integration)
+- `progress/thejas/` — Dev B (remediation_engine, gitlab_integration)
 
 Read the newest file in the relevant folder (sort by date in filename) to get current status. This tells you what is implemented vs stubbed, what was just completed, and what is planned next — without re-exploring the full codebase.
 
