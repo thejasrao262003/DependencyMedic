@@ -78,6 +78,19 @@ DEMO_REPOSITORIES = [
         "last_scanned_commit": None,
         "status": "active",
         "tags": ["critical-service", "payments"],
+        "seed_manifests": {
+            "pom.xml": (
+                "<project>\n"
+                "  <dependencies>\n"
+                "    <dependency>\n"
+                "      <groupId>org.apache.logging.log4j</groupId>\n"
+                "      <artifactId>log4j-core</artifactId>\n"
+                "      <version>2.14.1</version>\n"
+                "    </dependency>\n"
+                "  </dependencies>\n"
+                "</project>\n"
+            ),
+        },
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "created_by": "seed_demo",
@@ -94,6 +107,14 @@ DEMO_REPOSITORIES = [
         "last_scanned_commit": None,
         "status": "active",
         "tags": ["auth", "security-critical"],
+        "seed_manifests": {
+            "requirements.txt": (
+                "cryptography==38.0.0\n"
+                "requests==2.27.0\n"
+                "Flask==2.0.0\n"
+                "PyJWT==2.4.0\n"
+            ),
+        },
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "created_by": "seed_demo",
@@ -110,6 +131,14 @@ DEMO_REPOSITORIES = [
         "last_scanned_commit": None,
         "status": "active",
         "tags": ["inventory"],
+        "seed_manifests": {
+            "requirements.txt": (
+                "Pillow==9.0.0\n"
+                "PyYAML==5.4.1\n"
+                "requests==2.26.0\n"
+                "Django==3.2.0\n"
+            ),
+        },
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat(),
         "created_by": "seed_demo",
