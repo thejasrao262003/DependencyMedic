@@ -13,6 +13,35 @@ MONGO_URI = "mongodb://mongodb:27017/dependencymedic"
 
 DEMO_VULNERABILITIES = [
     {
+        # CVE-2023-32681: requests SSRF — affects requests < 2.31.0
+        # Matches repo-demo-002 (requests==2.27.0) and repo-demo-003 (requests==2.26.0)
+        # Python/PyPI → fully supported by Thejas's manifest_patcher
+        "_id": "vuln-demo-003",
+        "cve_id": "CVE-2023-32681",
+        "aliases": ["GHSA-j8r2-6x86-q33q"],
+        "summary": "Requests library leaks Proxy-Authorization headers on redirect",
+        "description": "Since Requests v2.3.0, Requests has been vulnerable to potentially leaking Proxy-Authorization headers to destination servers when following redirects to non-matching hosts.",
+        "severity": "critical",
+        "cvss_score": 9.1,
+        "epss_score": 0.72,
+        "published_at": "2023-05-26T00:00:00Z",
+        "affected_packages": [
+            {
+                "name": "requests",
+                "ecosystem": "pypi",
+                "affected_versions": "<2.31.0",
+                "fixed_versions": ["2.31.0"],
+            }
+        ],
+        "references": ["https://nvd.nist.gov/vuln/detail/CVE-2023-32681"],
+        "source": "NVD",
+        "status": "active",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "created_by": "seed_demo",
+        "version": 1,
+    },
+    {
         "_id": "vuln-demo-001",
         "cve_id": "CVE-2021-44228",
         "aliases": ["GHSA-jfh8-c2jp-hdp8"],

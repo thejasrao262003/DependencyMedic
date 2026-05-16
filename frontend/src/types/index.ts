@@ -9,6 +9,7 @@ export interface Vulnerability {
   epss_score: number | null;
   published_at: string | null;
   affected_packages: AffectedPackage[];
+  references: string[];
   status: string;
   created_at: string;
   updated_at: string;

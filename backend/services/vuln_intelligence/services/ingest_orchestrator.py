@@ -4,8 +4,9 @@ from dataclasses import dataclass, field
 from .nvd_ingestion import NVDIngestionService
 from .osv_ingestion import OSVIngestionService
 from .vuln_store import VulnStore
+from .repo_matcher import RepoMatcher
 from ..producers.vuln_producer import VulnProducer
-from shared.constants import STREAM_VULN_DISCOVERED
+from shared.constants import STREAM_VULN_DISCOVERED, STREAM_VULN_MATCHED
 from shared.logging import get_logger
 
 logger = get_logger("vuln_intelligence.orchestrator")
@@ -17,6 +18,7 @@ class IngestResult:
     new_stored: int = 0
     updated: int = 0
     events_published: int = 0
+    matched_published: int = 0
     errors: list[str] = field(default_factory=list)
 
 
@@ -26,6 +28,7 @@ class IngestOrchestrator:
         self.osv = OSVIngestionService()
         self.store = VulnStore()
         self.producer = VulnProducer()
+        self.matcher = RepoMatcher()
 
     async def run(
         self,
@@ -103,6 +106,40 @@ class IngestOrchestrator:
                         },
                     )
                     result.events_published += 1
+
+                    # Match repos and publish vuln.matched if any are affected
+                    affected_packages = vuln.get("affected_packages", [])
+                    if affected_packages:
+                        repo_ids = await self.matcher.find_affected_repos(
+                            affected_packages=affected_packages,
+                            vuln_id=vuln_id,
+                            correlation_id=correlation_id,
+                        )
+                        if repo_ids:
+                            await self.producer.publish_matched(
+                                vuln_id=vuln_id,
+                                cve_id=vuln["cve_id"],
+                                repository_ids=repo_ids,
+                                affected_packages=[
+                                    p["name"] for p in affected_packages if p.get("name")
+                                ],
+                                correlation_id=correlation_id,
+                            )
+                            await self.store.log_event(
+                                event_type=STREAM_VULN_MATCHED,
+                                correlation_id=correlation_id,
+                                payload={
+                                    "vulnerability_id": vuln_id,
+                                    "cve_id": vuln["cve_id"],
+                                    "repository_ids": repo_ids,
+                                    "affected_packages": [
+                                        p["name"]
+                                        for p in affected_packages
+                                        if p.get("name")
+                                    ],
+                                },
+                            )
+                            result.matched_published += 1
                 else:
                     result.updated += 1
 
@@ -121,6 +158,7 @@ class IngestOrchestrator:
                 "new_stored": result.new_stored,
                 "updated": result.updated,
                 "events_published": result.events_published,
+                "matched_published": result.matched_published,
                 "errors": len(result.errors),
                 "correlation_id": correlation_id,
             },

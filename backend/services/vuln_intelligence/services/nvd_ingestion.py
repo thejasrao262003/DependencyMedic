@@ -17,6 +17,9 @@ class NVDIngestionService:
         # NVD rate limits: 5 req/30s without key, 50 req/30s with key
         self._request_delay = 0.6 if self.api_key else 6.0
 
+    # NVD API v2 enforces a 120-day maximum date range per request
+    _NVD_MAX_WINDOW_DAYS = 119
+
     async def fetch_recent_cves(
         self,
         days_back: int = 30,
@@ -24,41 +27,63 @@ class NVDIngestionService:
     ) -> list[dict]:
         end = datetime.now(timezone.utc)
         start = end - timedelta(days=days_back)
-
-        base_params = {
-            "pubStartDate": start.strftime("%Y-%m-%dT%H:%M:%S.000"),
-            "pubEndDate": end.strftime("%Y-%m-%dT%H:%M:%S.000"),
-            "noRejected": "",
-            "resultsPerPage": 100,
-        }
         headers = {"apiKey": self.api_key} if self.api_key else {}
         target_severities = [s.upper() for s in (severities or ["CRITICAL", "HIGH"])]
 
+        # Chunk the date range into <=119-day windows to stay within NVD's limit
+        windows: list[tuple[datetime, datetime]] = []
+        window_start = start
+        while window_start < end:
+            window_end = min(window_start + timedelta(days=self._NVD_MAX_WINDOW_DAYS), end)
+            windows.append((window_start, window_end))
+            window_start = window_end
+
         all_vulns: list[dict] = []
+        seen_ids: set[str] = set()
+
         for severity in target_severities:
-            await asyncio.sleep(self._request_delay)
-            try:
-                params = {**base_params, "cvssV3Severity": severity}
-                async with httpx.AsyncClient(timeout=30.0) as client:
-                    r = await client.get(NVD_BASE_URL, params=params, headers=headers)
-                    r.raise_for_status()
-                    data = r.json()
+            for w_start, w_end in windows:
+                await asyncio.sleep(self._request_delay)
+                try:
+                    params = {
+                        "pubStartDate": w_start.strftime("%Y-%m-%dT%H:%M:%S.000"),
+                        "pubEndDate": w_end.strftime("%Y-%m-%dT%H:%M:%S.000"),
+                        "noRejected": "",
+                        "resultsPerPage": 100,
+                        "cvssV3Severity": severity,
+                    }
+                    async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
+                        r = await client.get(NVD_BASE_URL, params=params, headers=headers)
+                        r.raise_for_status()
+                        data = r.json()
 
-                items = data.get("vulnerabilities", [])
-                for item in items:
-                    normalized = self._normalize(item["cve"], severity.lower())
-                    if normalized:
-                        all_vulns.append(normalized)
+                    items = data.get("vulnerabilities", [])
+                    new_count = 0
+                    for item in items:
+                        normalized = self._normalize(item["cve"], severity.lower())
+                        if normalized and normalized["cve_id"] not in seen_ids:
+                            seen_ids.add(normalized["cve_id"])
+                            all_vulns.append(normalized)
+                            new_count += 1
 
-                logger.info(
-                    "NVD fetch complete",
-                    extra={"severity": severity, "count": len(items)},
-                )
-            except Exception as exc:
-                logger.error(
-                    "NVD fetch failed",
-                    extra={"severity": severity, "error": str(exc)},
-                )
+                    logger.info(
+                        "NVD fetch complete",
+                        extra={
+                            "severity": severity,
+                            "window_start": w_start.date().isoformat(),
+                            "window_end": w_end.date().isoformat(),
+                            "count": new_count,
+                        },
+                    )
+                except Exception as exc:
+                    logger.error(
+                        "NVD fetch failed",
+                        extra={
+                            "severity": severity,
+                            "window_start": w_start.date().isoformat(),
+                            "error": str(exc),
+                        },
+                    )
 
         return all_vulns
 

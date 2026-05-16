@@ -2,6 +2,143 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gray-950 text-gray-100 font-mono;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #ffffff;
+  --surface: #f9f9f9;
+  --surface-hi: #f3f3f3;
+  --border: #e5e5e5;
+  --border-hi: #d0d0d0;
+  --text: #111111;
+  --text-2: #555555;
+  --text-3: #999999;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Dark mode variable overrides ── */
+.dark {
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --surface-hi: #1e1e1e;
+  --border: #272727;
+  --border-hi: #333333;
+  --text: #f0f0f0;
+  --text-2: #a0a0a0;
+  --text-3: #555555;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── Card ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color .15s;
+}
+.card-hover:hover {
+  border-color: var(--border-hi);
+}
+
+/* ── Severity badges ── */
+.badge-critical { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.badge-high     { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
+.badge-medium   { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+.badge-low      { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+/* ── Status badges ── */
+.badge-passed    { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.badge-failed    { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.badge-running   { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+.badge-pending   { background: #f9f9f9; color: #555555; border: 1px solid #e5e5e5; }
+.badge-validated { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.badge-open      { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+.badge-merged    { background: #faf5ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+.badge-escalated { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+
+/* ── Primary button ── */
+.btn-primary {
+  background: #111111;
+  color: #ffffff;
+  border: 1px solid #111111;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+}
+.btn-primary:hover { background: #333333; border-color: #333333; }
+.btn-primary:disabled { opacity: .35; cursor: not-allowed; }
+
+/* ── Ghost button ── */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.btn-ghost:hover { border-color: var(--border-hi); color: var(--text); }
+
+/* ── Dark mode component overrides ── */
+.dark .card {
+  background: var(--surface);
+  border-color: var(--border);
+}
+.dark .card-hover:hover { border-color: var(--border-hi); }
+
+.dark .badge-critical { background: rgba(220,38,38,.12); color: #f87171; border-color: rgba(220,38,38,.25); }
+.dark .badge-high     { background: rgba(234,88,12,.12);  color: #fb923c; border-color: rgba(234,88,12,.25); }
+.dark .badge-medium   { background: rgba(217,119,6,.12);  color: #fbbf24; border-color: rgba(217,119,6,.25); }
+.dark .badge-low      { background: rgba(22,163,74,.12);  color: #4ade80; border-color: rgba(22,163,74,.25); }
+.dark .badge-passed    { background: rgba(22,163,74,.12);  color: #4ade80; border-color: rgba(22,163,74,.25); }
+.dark .badge-failed    { background: rgba(220,38,38,.12);  color: #f87171; border-color: rgba(220,38,38,.25); }
+.dark .badge-running   { background: rgba(37,99,235,.12);  color: #60a5fa; border-color: rgba(37,99,235,.25); }
+.dark .badge-pending   { background: rgba(255,255,255,.05); color: #888888; border-color: rgba(255,255,255,.1); }
+.dark .badge-validated { background: rgba(22,163,74,.12);  color: #4ade80; border-color: rgba(22,163,74,.25); }
+.dark .badge-open      { background: rgba(37,99,235,.12);  color: #60a5fa; border-color: rgba(37,99,235,.25); }
+.dark .badge-merged    { background: rgba(124,58,237,.12); color: #a78bfa; border-color: rgba(124,58,237,.25); }
+.dark .badge-escalated { background: rgba(217,119,6,.12);  color: #fbbf24; border-color: rgba(217,119,6,.25); }
+
+.dark .btn-primary {
+  background: #f0f0f0;
+  color: #0a0a0a;
+  border-color: #f0f0f0;
+}
+.dark .btn-primary:hover { background: #ffffff; border-color: #ffffff; }
+.dark .btn-primary:disabled { opacity: .3; }
+
+.dark .btn-ghost {
+  color: #888888;
+  border-color: var(--border);
+}
+.dark .btn-ghost:hover { border-color: var(--border-hi); color: #f0f0f0; }
+
+/* ── Fade in ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp .2s ease-out forwards; }
+
+/* ── Dot pulse ── */
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+.dot-pulse { animation: pulse 2s ease-in-out infinite; }

@@ -14,7 +14,7 @@ class OSVIngestionService:
     async def enrich_with_packages(self, cve_id: str) -> list[dict]:
         """Query OSV by CVE ID and return affected package list."""
         try:
-            async with httpx.AsyncClient(timeout=20.0) as client:
+            async with httpx.AsyncClient(timeout=20.0, verify=False) as client:
                 r = await client.post(OSV_QUERY_URL, json={"id": cve_id})
                 if r.status_code == 404:
                     return []
@@ -53,7 +53,7 @@ class OSVIngestionService:
                 {"package": {"name": p["name"], "ecosystem": p["ecosystem"]}}
                 for p in packages
             ]
-            async with httpx.AsyncClient(timeout=30.0) as client:
+            async with httpx.AsyncClient(timeout=30.0, verify=False) as client:
                 r = await client.post(OSV_BATCH_URL, json={"queries": queries})
                 r.raise_for_status()
                 data = r.json()

@@ -71,3 +71,19 @@ async def get_vulnerability(vulnerability_id: str):
         return APIResponse.fail("NOT_FOUND", f"Vulnerability {vulnerability_id} not found")
     doc["id"] = str(doc.pop("_id"))
     return APIResponse.ok(doc)
+
+
+@router.post("/{vulnerability_id}/match", response_model=APIResponse)
+async def trigger_match(vulnerability_id: str):
+    """Proxy to vuln_intelligence — re-run repo matching for an existing vulnerability."""
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            r = await client.post(
+                f"{settings.vuln_intelligence_url}/api/v1/match/{vulnerability_id}",
+            )
+            r.raise_for_status()
+            return r.json()
+    except httpx.HTTPStatusError as exc:
+        return APIResponse.fail("MATCH_ERROR", str(exc))
+    except Exception as exc:
+        return APIResponse.fail("MATCH_UNAVAILABLE", f"vuln_intelligence unreachable: {exc}")
