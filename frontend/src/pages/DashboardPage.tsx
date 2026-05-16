@@ -17,17 +17,17 @@ export default function DashboardPage() {
   useEffect(() => {
     Promise.all([
       api.get("/vulnerabilities?limit=1"),
-      api.get("/repositories?limit=1"),
-      api.get("/remediations?limit=1"),
-      api.get("/merge-requests?limit=1"),
+      api.get("/repositories"),
+      api.get("/remediations"),
+      api.get("/merge-requests"),
       api.get("/health"),
     ])
-      .then(([v, r, p, m, h]) => {
+      .then(([v, r, rem, m, h]) => {
         setStats({
           vulns: v.data.data?.total ?? 0,
-          repos: (v.data.data as unknown[])?.length ?? 0,
-          patches: 0,
-          mrs: 0,
+          repos: (r.data.data as unknown[])?.length ?? 0,
+          patches: (rem.data.data as unknown[])?.length ?? 0,
+          mrs: (m.data.data as unknown[])?.length ?? 0,
         });
         setHealth(h.data.data?.services ?? {});
       })

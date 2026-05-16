@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     mongo_uri: str = "mongodb://mongodb:27017/dependencymedic"
     redis_url: str = "redis://redis:6379"
     api_key: str = "dev-api-key-change-me"
+    vuln_intelligence_url: str = "http://vuln_intelligence:8001"
     remediation_engine_url: str = "http://remediation_engine:8003"
     gitlab_integration_url: str = "http://gitlab_integration:8004"
     log_level: str = "INFO"

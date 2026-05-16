@@ -1,6 +1,7 @@
 import { Routes, Route, NavLink } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
 import VulnerabilitiesPage from "./pages/VulnerabilitiesPage";
+import RepositoriesPage from "./pages/RepositoriesPage";
 import RemediationsPage from "./pages/RemediationsPage";
 import PipelinesPage from "./pages/PipelinesPage";
 
@@ -29,6 +30,7 @@ export default function App() {
         <nav className="flex gap-2">
           <NavItem to="/" label="Dashboard" />
           <NavItem to="/vulnerabilities" label="Vulnerabilities" />
+          <NavItem to="/repositories" label="Repositories" />
           <NavItem to="/remediations" label="Remediations" />
           <NavItem to="/pipelines" label="Pipelines" />
         </nav>
@@ -37,6 +39,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<DashboardPage />} />
           <Route path="/vulnerabilities" element={<VulnerabilitiesPage />} />
+          <Route path="/repositories" element={<RepositoriesPage />} />
           <Route path="/remediations" element={<RemediationsPage />} />
           <Route path="/pipelines" element={<PipelinesPage />} />
         </Routes>

@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     gitlab_url: str = "https://gitlab.com"
     gitlab_token: str = ""
     gemini_api_key: str = ""
+    nvd_api_key: str = ""
     log_level: str = "INFO"
     environment: str = "development"
 

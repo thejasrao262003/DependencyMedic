@@ -7,6 +7,7 @@ from shared.utils.redis_streams import get_redis, close_redis
 from shared.logging import get_logger
 from .config import settings
 from .api.health import router as health_router
+from .api.ingest import router as ingest_router
 
 logger = get_logger(settings.service_name)
 
@@ -29,6 +30,7 @@ app = FastAPI(
 )
 
 app.include_router(health_router, prefix="/api/v1")
+app.include_router(ingest_router, prefix="/api/v1")
 
 
 if __name__ == "__main__":
